@@ -17,6 +17,5 @@
 {:then ctor}
   <svelte:component this={ctor} />
 {:catch}
-  oops `{is}`
   <Icon icon={ui.icon.Error} clazz="icon-2x" />
 {/await}

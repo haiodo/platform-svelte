@@ -18,12 +18,16 @@ import { createPlatform } from '@anticrm/platform'
 import ui from '@anticrm/platform-ui'
 import login from '@anticrm/login'
 
+import uiMeta from '@anticrm/platform-ui/src/__meta__/meta'
+
 import ErrorPage from './components/ErrorPage.svelte'
 
 const platform = createPlatform()
 
 platform.addLocation(ui, () => import(/* webpackChunkName: "platform-ui" */ '@anticrm/platform-ui/src/plugin'))
 platform.addLocation(login, () => import(/* webpackChunkName: "login" */ '@anticrm/login/src/plugin'))
+
+uiMeta(platform)
 
 async function boot (): Promise<void> {
   const uiService = await platform.getPlugin(ui.id)

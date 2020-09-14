@@ -74,6 +74,27 @@ module.exports = {
 						esModule: false
 					},
 				},
+			},
+			{
+				test: /\.svg$/,
+				use: [
+					{
+						loader: 'file-loader',
+						options: {
+							esModule: false
+						}
+					},
+					{
+						loader: 'svgo-loader',
+						options: {
+							plugins: [
+								{ removeHiddenElems: { displayNone: false } },
+								{ cleanupIDs: false },
+								{ removeTitle: true },
+							]
+						}
+					}
+				]
 			}
 		]
 	},
