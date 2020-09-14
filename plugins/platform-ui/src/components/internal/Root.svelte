@@ -7,7 +7,7 @@
   import Theme from "@anticrm/sparkling-theme/src/components/Theme.svelte";
   import StatusComponent from "./Status.svelte";
   import Clock from "./Clock.svelte";
-  import Component from "./Component.svelte";
+  import Component from "../Component.svelte";
 
   export let platform: Platform;
   export let ui: UIService;

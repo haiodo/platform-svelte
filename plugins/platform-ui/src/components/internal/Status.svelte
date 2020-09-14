@@ -5,7 +5,7 @@
   import { Severity } from "@anticrm/platform";
   import ui from "@anticrm/platform-ui";
 
-  import Icon from "./Icon.svelte";
+  import Icon from "../Icon.svelte";
 
   export let status: Status;
 </script>

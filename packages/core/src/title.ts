@@ -13,10 +13,4 @@
 // limitations under the License.
 //
 
-export * from './rpc'
-export * from './core'
-export * from './domain'
-export * from './model'
-export * from './text'
-export * from './tx'
-export * from './title'
+export const TITLE_DOMAIN = 'title'

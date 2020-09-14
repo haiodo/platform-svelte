@@ -13,10 +13,8 @@
 // limitations under the License.
 //
 
-export * from './rpc'
-export * from './core'
-export * from './domain'
-export * from './model'
-export * from './text'
-export * from './tx'
-export * from './title'
+import { Ref, Doc, Class, AnyLayout } from './core'
+
+export interface Domain {
+  find<T extends Doc> (_class: Ref<Class<T>>, query: AnyLayout): Promise<T[]>
+}

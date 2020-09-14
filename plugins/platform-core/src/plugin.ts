@@ -14,42 +14,33 @@
 //
 
 import type { Platform } from '@anticrm/platform'
-import type { UIService } from '.'
+import { Ref, Class, Doc, AnyLayout, Domain, Model, MODEL_DOMAIN } from '@anticrm/core'
 
-import { writable, derived } from 'svelte/store'
-
-import Root from './components/internal/Root.svelte'
+import type { CoreService } from '.'
 
 /*!
- * Anticrm Platform™ UI Plugin
+ * Anticrm Platform™ Workbench Plugin
  * © 2020 Anticrm Platform Contributors. All Rights Reserved.
  * Licensed under the Eclipse Public License, Version 2.0
  */
-export default async (platform: Platform): Promise<UIService> => {
+export default async (platform: Platform): Promise<CoreService> => {
 
-  function createApp (target: HTMLElement) {
-    return new Root({ target, props: { platform, ui } })
+  const model = new Model(MODEL_DOMAIN)
+
+  const domains = new Map<string, Domain>()
+  domains.set(MODEL_DOMAIN, model)
+
+  function find<T extends Doc> (_class: Ref<Class<T>>, query: AnyLayout): Promise<T[]> {
+    const domainName = model.getDomain(_class)
+    const domain = domains.get(domainName)
+    if (domain) {
+      return domain.find(_class, query)
+    }
+    throw new Error('domain not found: ' + domainName)
   }
 
-  function windowLocation () {
-    return { pathname: window.location.pathname, search: window.location.search }
+  return {
+    find
   }
-  const locationWritable = writable(windowLocation())
-  window.addEventListener('popstate', () => {
-    locationWritable.set(windowLocation())
-  })
-
-  const location = derived(locationWritable, loc => loc)
-
-  function getLocation () {
-    return location
-  }
-
-  const ui = {
-    createApp,
-    getLocation
-  }
-
-  return ui
 
 }

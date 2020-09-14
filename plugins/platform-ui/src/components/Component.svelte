@@ -3,7 +3,7 @@
   import { getContext } from "svelte";
 
   import ui, { AnyComponent } from "@anticrm/platform-ui";
-  import Spinner from "./Spinner.svelte";
+  import Spinner from "./internal/Spinner.svelte";
   import Icon from "./Icon.svelte";
 
   export let is: AnyComponent;
