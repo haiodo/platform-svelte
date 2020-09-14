@@ -13,11 +13,10 @@
 // limitations under the License.
 //
 
-export * from './rpc'
-export * from './core'
-export * from './domain'
-export * from './model'
-export * from './text'
-export * from './tx'
-export * from './title'
-export * from './objectid'
+import { encode } from 'jwt-simple'
+
+const secret = 'secret'
+const email = 'demo@user.com'
+const workspace = 'latest-model'
+
+console.log('token', encode({ email, workspace }, secret))

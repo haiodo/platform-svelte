@@ -4,6 +4,7 @@
   "workspaces": [
     "packages/*",
     "plugins/*",
+    "server/*",
     "dev/*"
   ],
   "dependencies": {}

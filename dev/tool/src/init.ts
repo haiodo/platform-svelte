@@ -13,11 +13,18 @@
 // limitations under the License.
 //
 
-export * from './rpc'
-export * from './core'
-export * from './domain'
-export * from './model'
-export * from './text'
-export * from './tx'
-export * from './title'
-export * from './objectid'
+import { Db } from 'mongodb'
+import { Model, Strings } from '@anticrm/boot/src/boot'
+import { Doc } from '@anticrm/core'
+
+export function initDatabase (db: Db) {
+  const domains = { ...Model } as { [key: string]: Doc[] }
+  const ops = [] as Promise<any>[]
+  for (const domain in domains) {
+    const model = domains[domain]
+    db.collection(domain, (err, coll) => {
+      ops.push(coll.deleteMany({}).then(() => model.length > 0 ? coll.insertMany(model) : null))
+    })
+  }
+  return Promise.all(ops)
+}
