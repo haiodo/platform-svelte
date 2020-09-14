@@ -1,5 +1,5 @@
 {
-  "name": "@anticrm/platform-ui",
+  "name": "@anticrm/core",
   "version": "0.2.0",
   "main": "src/index.ts",
   "author": "Anticrm Platform Contributors (https://github.com/anticrm)",
@@ -7,11 +7,10 @@
   "scripts": {
     "build": "tsc"
   },
-  "dependencies": {
-    "@anticrm/platform": "^0.2.0",
-    "@anticrm/sparkling-theme": "^0.1.1"
-  },
   "devDependencies": {
     "typescript": "^3.9.4"
+  },
+  "dependencies": {
+    "@anticrm/platform": "0.2.0"
   }
 }

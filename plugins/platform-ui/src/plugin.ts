@@ -16,6 +16,8 @@
 import type { Platform } from '@anticrm/platform'
 import type { UIService } from '.'
 
+import { writable, derived } from 'svelte/store'
+
 import Root from './components/Root.svelte'
 
 /*!
@@ -25,10 +27,29 @@ import Root from './components/Root.svelte'
  */
 export default async (platform: Platform): Promise<UIService> => {
 
-  return {
-    createApp (target: HTMLElement) {
-      return new Root({ target })
-    }
+  function createApp (target: HTMLElement) {
+    return new Root({ target, props: { platform, ui } })
   }
+
+  function windowLocation () {
+    return { pathname: window.location.pathname, search: window.location.search }
+  }
+  const locationWritable = writable(windowLocation())
+  window.addEventListener('popstate', () => {
+    locationWritable.set(windowLocation())
+  })
+
+  const location = derived(locationWritable, loc => loc)
+
+  function getLocation () {
+    return location
+  }
+
+  const ui = {
+    createApp,
+    getLocation
+  }
+
+  return ui
 
 }

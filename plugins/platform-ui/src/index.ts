@@ -14,6 +14,7 @@
 //
 
 import { Metadata, plugin, Plugin, Resource, Service } from '@anticrm/platform'
+import { Readable } from 'svelte/store'
 
 export type URL = string
 export type Asset = Metadata<URL>
@@ -23,12 +24,13 @@ export type Component<C extends SvelteConstructor> = Resource<C>
 export type AnyComponent = Component<SvelteConstructor>
 
 export interface Location {
-  app: string | undefined
-  path: string[]
+  pathname: string
+  search: string
 }
 
 export interface UIService extends Service {
   createApp (root: HTMLElement): any
+  getLocation (): Readable<Location>
 }
 
 export default plugin('ui' as Plugin<UIService>, {}, {

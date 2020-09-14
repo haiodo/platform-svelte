@@ -2,9 +2,13 @@
   "name": "prod",
   "version": "1.0.0",
   "devDependencies": {
+    "autoprefixer": "^9.8.6",
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.1",
+    "file-loader": "^6.1.0",
     "mini-css-extract-plugin": "^0.6.0",
+    "sass": "^1.26.10",
+    "sass-loader": "^10.0.2",
     "serve": "^11.0.0",
     "style-loader": "^0.23.1",
     "svelte": "^3.0.0",
@@ -18,6 +22,7 @@
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
-    "dev": "webpack-dev-server --content-base public"
+    "dev": "webpack-dev-server --content-base public",
+    "start": "cross-env NODE_ENV=production webpack-dev-server --content-base public"
   }
 }

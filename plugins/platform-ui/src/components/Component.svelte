@@ -1,0 +1,22 @@
+<script lang="ts">
+  import { Platform } from "@anticrm/platform";
+  import { getContext } from "svelte";
+
+  import ui, { AnyComponent } from "@anticrm/platform-ui";
+  import Spinner from "./Spinner.svelte";
+  import Icon from "./Icon.svelte";
+
+  export let is: AnyComponent;
+
+  const platform = getContext("platform") as Platform;
+  const component = platform.getResource(is);
+</script>
+
+{#await component}
+  <Spinner />
+{:then ctor}
+  <svelte:component this={ctor} />
+{:catch}
+  oops `{is}`
+  <Icon icon={ui.icon.Error} clazz="icon-2x" />
+{/await}

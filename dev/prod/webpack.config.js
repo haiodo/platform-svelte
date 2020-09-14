@@ -32,7 +32,7 @@ module.exports = {
 		mainFields: ['svelte', 'browser', 'module', 'main']
 	},
 	output: {
-		path: __dirname + '/public',
+		path: __dirname + '/dist',
 		filename: '[name].js',
 		chunkFilename: '[name].[id].js'
 	},
@@ -64,6 +64,16 @@ module.exports = {
 					prod ? MiniCssExtractPlugin.loader : 'style-loader',
 					'css-loader'
 				]
+			},
+			{
+				test: /\.(ttf|otf|eot|woff|woff2)$/,
+				use: {
+					loader: "file-loader",
+					options: {
+						name: "fonts/[name].[ext]",
+						esModule: false
+					},
+				},
 			}
 		]
 	},
@@ -73,5 +83,10 @@ module.exports = {
 			filename: '[name].css'
 		})
 	],
-	devtool: prod ? false : 'source-map'
+	devtool: prod ? false : 'source-map',
+	devServer: {
+		historyApiFallback: {
+			disableDotRule: true
+		}
+	}
 }
