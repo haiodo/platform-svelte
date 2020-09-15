@@ -14,10 +14,12 @@
 //
 
 import type { Platform } from '@anticrm/platform'
-import { Ref, Class, Doc, AnyLayout, Domain, Model, MODEL_DOMAIN, CoreProtocol, Tx } from '@anticrm/core'
+import { Ref, Class, Doc, AnyLayout, Domain, Model, MODEL_DOMAIN, CoreProtocol, Tx, Space } from '@anticrm/core'
 
 import type { CoreService } from '.'
 import rpcService from './rpc'
+
+import { writable, derived } from 'svelte/store'
 
 /*!
  * Anticrm Platform™ Workbench Plugin
@@ -25,6 +27,10 @@ import rpcService from './rpc'
  * Licensed under the Eclipse Public License, Version 2.0
  */
 export default async (platform: Platform): Promise<CoreService> => {
+
+  let space: Space | null = null
+  const spaceWritable = writable<Space | null>(space)
+  const spaceReadable = derived(spaceWritable, space => space)
 
   const rpc = rpcService(platform)
 
@@ -51,6 +57,8 @@ export default async (platform: Platform): Promise<CoreService> => {
   }
 
   return {
+    getSpace () { return spaceReadable },
+    setSpace (_space: Space | null) { spaceWritable.set(space = _space) },
     find
   }
 

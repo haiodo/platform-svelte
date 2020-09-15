@@ -16,11 +16,18 @@
 import { Ref, Class, Doc, AnyLayout } from '@anticrm/core'
 import { Platform } from '@anticrm/platform'
 import { getContext } from 'svelte'
-import core from '@anticrm/platform-core'
+import core, { CoreService } from '@anticrm/platform-core'
+import { UIService, CONTEXT_PLATFORM, CONTEXT_PLATFORM_UI } from '@anticrm/platform-ui'
+
+export function getCoreService (): Promise<CoreService> {
+  const platform = getContext(CONTEXT_PLATFORM) as Platform
+  return platform.getPlugin(core.id)
+}
+
+export function getUIService (): UIService {
+  return getContext(CONTEXT_PLATFORM_UI) as UIService
+}
 
 export function find<T extends Doc> (_class: Ref<Class<T>>, query: AnyLayout): Promise<T[]> {
-  const platform = getContext('platform') as Platform
-
-  return platform.getPlugin(core.id)
-    .then(coreService => coreService.find(_class, query))
+  return getCoreService().then(coreService => coreService.find(_class, query))
 }

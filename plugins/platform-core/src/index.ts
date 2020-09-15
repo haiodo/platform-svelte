@@ -19,7 +19,12 @@ import {
   CreateTx, PushTx, UpdateTx, DeleteTx, Space, Title, CORE_CLASS_BACKLINKS
 } from '@anticrm/core'
 
+import { Readable } from 'svelte/store'
+
 export interface CoreService extends Service {
+  getSpace (): Readable<Space | null>
+  setSpace (space: Space | null): void
+
   find<T extends Doc> (_class: Ref<Class<T>>, query: AnyLayout): Promise<T[]>
 }
 

@@ -36,8 +36,7 @@ export default (platform: Platform): RpcService => {
     const port = platform.getMetadata(core.metadata.WSPort)
     const token = platform.getMetadata(login.metadata.Token)
 
-    console.log('token', platform.getMetadata(login.metadata.Token))
-
+    // console.log('token', platform.getMetadata(login.metadata.Token))
     // const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0ZW5hbnQiOiJsYXRlc3QtbW9kZWwifQ.hKZDHkhxNL-eCOqk5NFToVh43KOGshLS4b6DgztJQqI'
 
     return new Promise<WebSocket>((resolve, reject) => {

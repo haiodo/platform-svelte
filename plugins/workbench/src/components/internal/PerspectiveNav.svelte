@@ -16,14 +16,15 @@
 <script lang="ts">
   import { Ref, Doc } from '@anticrm/core'
   import workbench, { Perspective } from '../..'
-  import { createEventDispatcher } from 'svelte'
+  import { getUIService } from '../../utils'
 
   import Icon from '@anticrm/platform-ui/src/components/Icon.svelte'
+  import LinkTo from '@anticrm/platform-ui/src/components/LinkTo.svelte'
 
   export let perspectives: Perspective[]
   export let current: Ref<Doc>
 
-  const dispatch = createEventDispatcher()
+  const uiService = getUIService()
 </script>
 
 <div class="workbench-nav">
@@ -32,9 +33,9 @@
     class="app-icon"
     class:current-app={ perspective._id === current }
   >
-    <a href="/" on:click|preventDefault={ () => dispatch('navigate', perspective) }>
+    <LinkTo href={'/' + workbench.component.Workbench + '/' + perspective._id}>
       <div class="icon"><Icon icon={ perspective.icon } clazz="icon-2x"/></div>
-    </a>
+    </LinkTo>
   </div>
   { /each }
   <div class="remainder"></div>

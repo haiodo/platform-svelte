@@ -16,8 +16,8 @@
 import type { Platform } from '@anticrm/platform'
 import workbench, { WorkbenchService } from '.'
 
-import Workbench from './components/Workbench.svelte'
-import DefaultPerspective from './components/DefaultPerspective.svelte'
+import Workbench from './components/internal/Workbench.svelte'
+import DefaultPerspective from './components/internal/DefaultPerspective.svelte'
 
 /*!
  * Anticrm Platform™ Workbench Plugin

@@ -16,19 +16,22 @@
 <script lang="ts">
   import { Ref, Doc } from '@anticrm/core'
   import workbench, { Perspective } from '../..'
-  import { find } from '../utils'
+  import { find, getUIService } from '../../utils'
+  import { getContext } from 'svelte'
 
   import Component from '@anticrm/platform-ui/src/components/Component.svelte'
-  import PerspectiveNav from './internal/PerspectiveNav.svelte'
+  import PerspectiveNav from './PerspectiveNav.svelte'
 
   let perspectives: Perspective[] = []
   let current: Ref<Doc>
 
+  const location = getUIService().getLocation()
+  location.subscribe(loc => {
+    current = loc.pathname.split('/')[2] as Ref<Doc>
+  })
+
   find(workbench.class.Perspective, {}).then(p => { 
     perspectives = p 
-    if (p.length > 0) {
-      current = p[0]._id
-    }
   })
 
   $: component = perspectives.find(h => h._id === current)?.component
@@ -41,7 +44,9 @@
   </nav>
 
   <main>
-    <Component is={ component }/>
+    { #if component}
+      <Component is={ component }/>
+    { /if}
   </main>
 
   <!-- <Spotlight /> -->

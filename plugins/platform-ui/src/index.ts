@@ -23,6 +23,9 @@ export type SvelteConstructor = object
 export type Component<C extends SvelteConstructor> = Resource<C>
 export type AnyComponent = Component<SvelteConstructor>
 
+export const CONTEXT_PLATFORM = 'platform'
+export const CONTEXT_PLATFORM_UI = 'platform-ui'
+
 export interface Location {
   pathname: string
   search: string

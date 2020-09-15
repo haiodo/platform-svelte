@@ -13,4 +13,15 @@
 // limitations under the License.
 -->
 
-<h1>Hallo!</h1>
+<script lang="ts">
+  import { getContext } from 'svelte'
+  import { CONTEXT_PLATFORM_UI, UIService } from '..'
+
+  export let href: string
+
+  const uiService = getContext(CONTEXT_PLATFORM_UI) as UIService
+</script>
+
+<a href="/" on:click|preventDefault={ () => uiService.navigate(href) }>
+  <slot />
+</a>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Platform, Status } from "@anticrm/platform";
   import { PlatformStatus, Severity } from "@anticrm/platform";
-  import type { UIService, AnyComponent } from "@anticrm/platform-ui";
+  import type { UIService, AnyComponent } from "../..";
   import { setContext } from "svelte";
 
   import Theme from "@anticrm/sparkling-theme/src/components/Theme.svelte";
@@ -9,14 +9,19 @@
   import Clock from "./Clock.svelte";
   import Component from "../Component.svelte";
 
+  import { 
+    CONTEXT_PLATFORM,
+    CONTEXT_PLATFORM_UI,
+  } from '../..'
+
   export let platform: Platform;
   export let ui: UIService;
 
-  setContext("platform", platform);
-  setContext("platform-ui", ui);
+  setContext(CONTEXT_PLATFORM, platform)
+  setContext(CONTEXT_PLATFORM_UI, ui)
 
   let currentApp: AnyComponent;
-  const location = ui.getLocation();
+  const location = ui.getLocation()
   location.subscribe((loc) => {
     currentApp = loc.pathname.split("/")[1] as AnyComponent;
   });
@@ -28,7 +33,7 @@
     async (event: string, platformStatus: Status) => {
       status = platformStatus;
     }
-  );
+  )
 </script>
 
 <style lang="scss">
