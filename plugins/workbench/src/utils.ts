@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-import { Ref, Class, Doc, AnyLayout } from '@anticrm/core'
+import { Ref, Class, Doc, AnyLayout, Mixin } from '@anticrm/core'
 import { Platform } from '@anticrm/platform'
 import { getContext } from 'svelte'
 import core, { CoreService } from '@anticrm/platform-core'
@@ -30,4 +30,10 @@ export function getUIService (): UIService {
 
 export function find<T extends Doc> (_class: Ref<Class<T>>, query: AnyLayout): Promise<T[]> {
   return getCoreService().then(coreService => coreService.find(_class, query))
+}
+
+export function findCast<T extends Doc> (_class: Ref<Class<Doc>>, query: AnyLayout, mixin: Ref<Mixin<T>>): Promise<T[]> {
+  return getCoreService()
+    .then(coreService => coreService.find(_class, query)
+      .then(docs => coreService.getModel().cast(docs, mixin)))
 }

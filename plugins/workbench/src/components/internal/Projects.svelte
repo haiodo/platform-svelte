@@ -15,7 +15,9 @@
 
 <script lang="ts">
   import { Ref, Space, Doc } from '@anticrm/core'
-  import { find, getUIService } from '../../utils'
+  import { findCast, getUIService } from '../../utils'
+  import core from '@anticrm/platform-core'
+  import presentation, { UXObject } from '@anticrm/presentation'
 
   import LinkTo from '@anticrm/platform-ui/src/components/LinkTo.svelte'
 
@@ -28,15 +30,21 @@
 
   $: space = location[3] as Ref<Space>
 
+  let spaces: UXObject[] = []
+  
+  findCast(core.class.Space, {}, presentation.mixin.UXObject).then(docs => {spaces = docs})
+
 </script>
 
 <div class="caption-3">Пространства</div>
 <div class="project" class:selected={!space}>
-  <LinkTo href={'/' + location[1] + '/' + location[2]}>Все</LinkTo>
+  <LinkTo href={'/' + location[1] + '/' + location[2]}><b>Все</b></LinkTo>
 </div>
-<!-- <div v-for="s in spaces" :key="s._id" class="project" :class:selected={s._id === space}>
-  <a href="#" @click.prevent="$emit('navigate', s._id)">#{s.label}</a>
-</div> -->
+{ #each spaces as s (s._id) }
+  <div class="project" class:selected={s._id === space}>
+    <LinkTo href={'/' + location[1] + '/' + location[2] + '/' + s._id}>#{s.label}</LinkTo>
+  </div>
+{ /each }
 
 <!-- <div class="caption-3">Тип</div>
 <div class="project">

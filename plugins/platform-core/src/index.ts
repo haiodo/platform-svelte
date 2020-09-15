@@ -18,13 +18,10 @@ import {
   Ref, Class, Doc, AnyLayout, Obj,
   CreateTx, PushTx, UpdateTx, DeleteTx, Space, Title, CORE_CLASS_BACKLINKS
 } from '@anticrm/core'
-
-import { Readable } from 'svelte/store'
+import type { ModelDb } from './modeldb'
 
 export interface CoreService extends Service {
-  getSpace (): Readable<Space | null>
-  setSpace (space: Space | null): void
-
+  getModel (): ModelDb
   find<T extends Doc> (_class: Ref<Class<T>>, query: AnyLayout): Promise<T[]>
 }
 

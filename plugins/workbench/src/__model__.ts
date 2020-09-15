@@ -13,11 +13,13 @@
 // limitations under the License.
 //
 
-import { Ref, MODEL_DOMAIN, StringProperty } from '@anticrm/core'
+import { Ref, MODEL_DOMAIN, StringProperty, Space } from '@anticrm/core'
 import { Builder, extendIds } from '@anticrm/model'
+import { IntlString } from '@anticrm/platform-i18n'
 
 import core from '@anticrm/platform-core/src/__model__'
-import { AnyComponent, Asset } from '@anticrm/platform-ui'
+import presentation from '@anticrm/presentation/src/__model__'
+
 import _workbench, { Perspective } from '.'
 
 const workbench = extendIds(_workbench, {
@@ -25,6 +27,10 @@ const workbench = extendIds(_workbench, {
   },
   perspective: {
     Default: '' as Ref<Perspective>
+  },
+  space: {
+    General: '' as Ref<Space>,
+    Random: '' as Ref<Space>
   }
 })
 
@@ -40,5 +46,19 @@ export function model (S: Builder) {
     icon: workbench.icon.DefaultPerspective,
     component: workbench.component.DefaultPerspective
   }, workbench.perspective.Default)
+
+  S.createDocument(core.class.Space, {
+  }, workbench.space.General)
+
+  S.mixin(workbench.space.General, presentation.mixin.UXObject, {
+    label: 'Общее' as IntlString
+  })
+
+  S.createDocument(core.class.Space, {
+  }, workbench.space.Random)
+
+  S.mixin(workbench.space.Random, presentation.mixin.UXObject, {
+    label: 'Всякое' as IntlString
+  })
 
 }

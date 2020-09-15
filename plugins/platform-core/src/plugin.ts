@@ -14,7 +14,8 @@
 //
 
 import type { Platform } from '@anticrm/platform'
-import { Ref, Class, Doc, AnyLayout, Domain, Model, MODEL_DOMAIN, CoreProtocol, Tx, Space } from '@anticrm/core'
+import { Ref, Class, Doc, AnyLayout, Domain, MODEL_DOMAIN, CoreProtocol, Tx, Space } from '@anticrm/core'
+import { ModelDb } from './modeldb'
 
 import type { CoreService } from '.'
 import rpcService from './rpc'
@@ -27,11 +28,6 @@ import { writable, derived } from 'svelte/store'
  * Licensed under the Eclipse Public License, Version 2.0
  */
 export default async (platform: Platform): Promise<CoreService> => {
-
-  let space: Space | null = null
-  const spaceWritable = writable<Space | null>(space)
-  const spaceReadable = derived(spaceWritable, space => space)
-
   const rpc = rpcService(platform)
 
   const coreProtocol: CoreProtocol = {
@@ -41,7 +37,7 @@ export default async (platform: Platform): Promise<CoreService> => {
     loadDomain: (domain: string): Promise<Doc[]> => rpc.request('loadDomain', domain),
   }
 
-  const model = new Model(MODEL_DOMAIN)
+  const model = new ModelDb()
   model.loadModel(await coreProtocol.loadDomain(MODEL_DOMAIN))
 
   const domains = new Map<string, Domain>()
@@ -57,8 +53,7 @@ export default async (platform: Platform): Promise<CoreService> => {
   }
 
   return {
-    getSpace () { return spaceReadable },
-    setSpace (_space: Space | null) { spaceWritable.set(space = _space) },
+    getModel () { return model },
     find
   }
 
