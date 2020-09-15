@@ -14,13 +14,14 @@
 //
 
 import { Ref, MODEL_DOMAIN, StringProperty, Space } from '@anticrm/core'
-import { Builder, extendIds } from '@anticrm/model'
+import { Builder, extendIds, ModelClass, Prop } from '@anticrm/model'
 import { IntlString } from '@anticrm/platform-i18n'
 
-import core from '@anticrm/platform-core/src/__model__'
+import core, { TApplication } from '@anticrm/platform-core/src/__model__'
+import { AnyComponent, Asset } from '@anticrm/platform-ui'
 import presentation from '@anticrm/presentation/src/__model__'
 
-import _workbench, { Perspective } from '.'
+import _workbench, { Perspective, WorkbenchApplication } from '.'
 
 const workbench = extendIds(_workbench, {
   component: {
@@ -34,7 +35,17 @@ const workbench = extendIds(_workbench, {
   }
 })
 
+@ModelClass(workbench.class.WorkbenchApplication, core.class.Application, MODEL_DOMAIN)
+class TWorkbenchApplication extends TApplication implements WorkbenchApplication {
+  @Prop() label!: IntlString
+  @Prop() icon?: Asset
+  @Prop() component!: AnyComponent
+}
+
 export function model (S: Builder) {
+
+  S.add(TWorkbenchApplication)
+
   S.createClass(workbench.class.Perspective, core.class.Doc, {
     label: S.attr(core.class.String, {}),
     icon: S.attr(core.class.Type, {}),
@@ -42,23 +53,23 @@ export function model (S: Builder) {
   }, MODEL_DOMAIN)
 
   S.createDocument(workbench.class.Perspective, {
-    label: 'Default' as StringProperty,
+    label: 'Default' as IntlString,
     icon: workbench.icon.DefaultPerspective,
     component: workbench.component.DefaultPerspective
   }, workbench.perspective.Default)
 
   S.createDocument(core.class.Space, {
+    label: 'Общее'
   }, workbench.space.General)
 
-  S.mixin(workbench.space.General, presentation.mixin.UXObject, {
-    label: 'Общее' as IntlString
-  })
-
   S.createDocument(core.class.Space, {
+    label: 'Всякое'
   }, workbench.space.Random)
 
-  S.mixin(workbench.space.Random, presentation.mixin.UXObject, {
-    label: 'Всякое' as IntlString
-  })
+  S.createDocument(workbench.class.WorkbenchApplication, {
+    label: 'Активность' as IntlString,
+    icon: workbench.icon.DefaultPerspective,
+    component: workbench.component.DefaultPerspective
+  }, workbench.application.Activity)
 
 }

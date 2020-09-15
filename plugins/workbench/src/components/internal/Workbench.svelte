@@ -20,7 +20,8 @@
   import { getContext } from 'svelte'
 
   import Component from '@anticrm/platform-ui/src/components/Component.svelte'
-  import PerspectiveNav from './PerspectiveNav.svelte'
+  import Icon from '@anticrm/platform-ui/src/components/Icon.svelte'
+  import LinkTo from '@anticrm/platform-ui/src/components/LinkTo.svelte'
 
   let perspectives: Perspective[] = []
   let current: Ref<Doc>
@@ -40,7 +41,17 @@
 <div id="workbench">
  
   <nav>
-    <PerspectiveNav { current } { perspectives }/>
+    { #each perspectives as perspective (perspective._id) }
+    <div
+      class="app-icon"
+      class:current-app={ perspective._id === current }
+    >
+      <LinkTo href={'/' + workbench.component.Workbench + '/' + perspective._id}>
+        <div class="icon"><Icon icon={ perspective.icon } clazz="icon-2x"/></div>
+      </LinkTo>
+    </div>
+    { /each }
+    <div class="remainder"></div>
   </nav>
 
   <main>
@@ -61,6 +72,28 @@
   nav {
     width: 48px;
     background-color: var(--theme-bg-color);
+
+    display: flex;
+    flex-direction: column;
+
+    .app-icon {
+      border-bottom: solid 1px var(--theme-separator-color);
+      border-right: solid 1px var(--theme-separator-color);
+
+      .icon {
+        padding: 1em;
+      }
+
+      &.current-app {
+        background-color: var(--theme-bg-color);
+        border-right: solid 1px var(--theme-content-bg-color);
+      }
+    }
+
+    .remainder {
+      flex-grow: 1;
+      border-right: solid 1px var(--theme-separator-color);
+    }      
   }
 
   main {

@@ -20,6 +20,7 @@ export type DateProperty = Property<number, Date>
 export const TX_DOMAIN = 'tx'
 
 export interface Space extends Doc {
+  label: string
 }
 
 export interface VDoc extends Doc {

@@ -20,7 +20,7 @@ import {
 } from '@anticrm/core'
 
 import { extendIds, ModelClass, Prop, Builder } from '@anticrm/model'
-import _core from '@anticrm/platform-core'
+import _core, { Application } from '@anticrm/platform-core'
 
 const core = extendIds(_core, {
   class: {
@@ -44,6 +44,7 @@ const core = extendIds(_core, {
     ArrayOf: '' as Ref<Class<ArrayOf<Type>>>,
 
     String: '' as Ref<Class<Type>>,
+    Application: '' as Ref<Class<Application>>
   },
   mixin: {
     Indices: '' as Ref<Mixin<Indices>>,
@@ -69,6 +70,15 @@ class TDoc extends TObj implements Doc {
   @Prop() _mixins?: Ref<Mixin<Doc>>[]
 }
 
+@ModelClass(core.class.Application, core.class.Doc, MODEL_DOMAIN)
+export class TApplication extends TDoc implements Application {
+}
+
+@ModelClass(core.class.Space, core.class.Doc, MODEL_DOMAIN)
+export class TSpace extends TDoc implements Space {
+  @Prop() label!: string
+}
+
 @ModelClass(core.class.VDoc, core.class.Doc)
 export class TVDoc extends TDoc implements VDoc {
   @Prop() _space!: Ref<Space>
@@ -87,7 +97,7 @@ class TBacklinks extends TDoc implements Backlinks {
 
 export function model (S: Builder) {
 
-  S.add(TObj, TEmb, TDoc, TVDoc, TBacklinks)
+  S.add(TObj, TEmb, TDoc, TVDoc, TBacklinks, TApplication, TSpace)
 
   S.createClass(core.class.Attribute, core.class.Emb, {
     type: S.attr(core.class.Type, {})
@@ -117,9 +127,6 @@ export function model (S: Builder) {
   }, MODEL_DOMAIN)
 
   S.createClass(core.class.Mixin, core.class.Class, {
-  }, MODEL_DOMAIN)
-
-  S.createClass(core.class.Space, core.class.Doc, {
   }, MODEL_DOMAIN)
 
   S.createClass(core.class.Title, core.class.Doc, {

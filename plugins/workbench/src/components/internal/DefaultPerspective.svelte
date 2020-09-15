@@ -14,15 +14,68 @@
 -->
 
 <script lang="ts">
-  import Projects from './Projects.svelte'
+  import { Ref, Space, Doc } from '@anticrm/core'
+  import { find, getUIService } from '../../utils'
+  import core from '@anticrm/platform-core'
+
+  import LinkTo from '@anticrm/platform-ui/src/components/LinkTo.svelte'
+  import workbench, { WorkbenchApplication } from '../..'
+
+  import Component from '@anticrm/platform-ui/src/components/Component.svelte'
+  import { AnyComponent } from '@anticrm/platform-ui';
+
+  let location: string[]
+
+  const locationStore = getUIService().getLocation()
+  locationStore.subscribe(loc => {
+    location = loc.pathname.split('/')
+  })
+
+  let space: Ref<Space>
+  let spaces: Space[] = []
+  find(core.class.Space, {}).then(docs => {spaces = docs})
+
+  let application: Ref<Doc>
+  let applications: WorkbenchApplication[] = []
+  find(workbench.class.WorkbenchApplication, {}).then(docs => {applications = docs})
+
+  let component: AnyComponent | undefined
+
+  $: {
+    space = location[3] as Ref<Space>
+    if (!application) {
+      application = workbench.application.Activity
+      component = applications.find(a => a._id === application)?.component
+    }
+  }
+
 </script>
 
 <div class="workbench-perspective">
   <div class="projects">
-    <Projects />
+    <div class="caption-3">Пространства</div>
+    <div class="project" class:selected={!space}>
+      <LinkTo href={'/' + location[1] + '/' + location[2]}><b>Все</b></LinkTo>
+    </div>
+    { #each spaces as s (s._id) }
+      <div class="project" class:selected={s._id === space}>
+        <LinkTo href={'/' + location[1] + '/' + location[2] + '/' + s._id}>#{s.label}</LinkTo>
+      </div>
+    { /each }
+
+    <div class="caption-3">Приложения</div>
+    { #each applications as app (app._id) }
+    <div class="app" class:selected={app._id === application}>
+      <a href='/' on:click|preventDefault={ e => { application = app._id } }>{app.label}</a>
+    </div>
+    { /each}
   </div>
+
   <div class="main">
     <div class="main-content">
+      { #if component}
+        <Component is = {component} />
+      { /if }
       <!-- <widget :_class="type" :space="space" :component="component" @open="open" /> -->
     </div>
     <div class="input-control">
@@ -47,6 +100,26 @@
   width: 20em;
 
   border-right: 1px solid var(--theme-separator-color);
+
+  .project {
+    font-family: Raleway;
+    padding: 0.5em;
+    &.selected {
+      // color: var(--theme-content-bg-color);
+      background-color: var(--theme-content-color-dark);
+    }
+    a {
+      text-decoration: none;
+    }
+  }
+
+  .app {
+    font-family: Raleway;
+    padding: 0.5em;
+    &.selected {
+      background-color: var(--theme-content-color-dark);
+    }
+  }  
 }
 
 .main {

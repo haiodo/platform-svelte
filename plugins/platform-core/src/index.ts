@@ -20,6 +20,9 @@ import {
 } from '@anticrm/core'
 import type { ModelDb } from './modeldb'
 
+export interface Application extends Doc {
+}
+
 export interface CoreService extends Service {
   getModel (): ModelDb
   find<T extends Doc> (_class: Ref<Class<T>>, query: AnyLayout): Promise<T[]>
