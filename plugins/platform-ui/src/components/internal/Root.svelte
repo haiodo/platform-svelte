@@ -33,7 +33,7 @@
 
 <style lang="scss">
   $status-bar-height: 20px;
-  $pictogram-size: 64px;
+  $pictogram-size: 48px;
 
   #ui-root {
     display: flex;

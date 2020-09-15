@@ -31,6 +31,7 @@ export interface Location {
 export interface UIService extends Service {
   createApp (root: HTMLElement): any
   getLocation (): Readable<Location>
+  navigate (url: string): void
 }
 
 export default plugin('ui' as Plugin<UIService>, {}, {

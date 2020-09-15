@@ -14,9 +14,26 @@
 //
 
 import platform from '@anticrm/boot/src/platform'
+
+import core from '@anticrm/platform-core'
 import ui from '@anticrm/platform-ui'
+import login, { currentAccount } from '@anticrm/login'
 
 import ErrorPage from './components/ErrorPage.svelte'
+
+const loginUrl = process.env.VUE_APP_LOGIN_URL
+const host = process.env.VUE_APP_WSHOST
+const port = process.env.VUE_APP_WSPORT
+
+platform.setMetadata(login.metadata.LoginUrl, loginUrl)
+platform.setMetadata(core.metadata.WSHost, host)
+platform.setMetadata(core.metadata.WSPort, port)
+
+const loginInfo = currentAccount()
+if (loginInfo) {
+  platform.setMetadata(login.metadata.WhoAmI, loginInfo.email)
+  platform.setMetadata(login.metadata.Token, loginInfo.token)
+}
 
 async function boot (): Promise<void> {
   const uiService = await platform.getPlugin(ui.id)

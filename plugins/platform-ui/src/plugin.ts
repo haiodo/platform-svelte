@@ -45,9 +45,15 @@ export default async (platform: Platform): Promise<UIService> => {
     return location
   }
 
+  function navigate (url: string) {
+    history.pushState(null, '', url)
+    locationWritable.set(windowLocation())
+  }
+
   const ui = {
     createApp,
-    getLocation
+    getLocation,
+    navigate,
   }
 
   return ui

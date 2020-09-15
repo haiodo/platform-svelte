@@ -18,6 +18,21 @@
 import { plugin, Metadata, Service, Plugin, Status } from '@anticrm/platform'
 import ui, { AnyComponent } from '@anticrm/platform-ui'
 
+export interface LoginInfo {
+  email: string
+  workspace: string
+  server: string
+  port: string
+  token: string
+}
+
+export const ACCOUNT_KEY = 'anticrm-account'
+
+export function currentAccount (): LoginInfo | null {
+  const account = localStorage.getItem(ACCOUNT_KEY)
+  return account ? JSON.parse(account) : null
+}
+
 export interface LoginService extends Service {
   doLogin (username: string, password: string, workspace: string): Promise<Status>
 }

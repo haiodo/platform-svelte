@@ -14,9 +14,10 @@
 //
 
 import type { Platform } from '@anticrm/platform'
-import { Ref, Class, Doc, AnyLayout, Domain, Model, MODEL_DOMAIN } from '@anticrm/core'
+import { Ref, Class, Doc, AnyLayout, Domain, Model, MODEL_DOMAIN, CoreProtocol, Tx } from '@anticrm/core'
 
 import type { CoreService } from '.'
+import rpcService from './rpc'
 
 /*!
  * Anticrm Platform™ Workbench Plugin
@@ -25,7 +26,17 @@ import type { CoreService } from '.'
  */
 export default async (platform: Platform): Promise<CoreService> => {
 
+  const rpc = rpcService(platform)
+
+  const coreProtocol: CoreProtocol = {
+    find: (_class: Ref<Class<Doc>>, query: AnyLayout): Promise<Doc[]> => rpc.request('find', _class, query),
+    findOne: (_class: Ref<Class<Doc>>, query: AnyLayout): Promise<Doc | undefined> => rpc.request('findOne', _class, query),
+    tx: (tx: Tx): Promise<void> => rpc.request('tx', tx),
+    loadDomain: (domain: string): Promise<Doc[]> => rpc.request('loadDomain', domain),
+  }
+
   const model = new Model(MODEL_DOMAIN)
+  model.loadModel(await coreProtocol.loadDomain(MODEL_DOMAIN))
 
   const domains = new Map<string, Domain>()
   domains.set(MODEL_DOMAIN, model)

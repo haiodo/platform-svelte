@@ -18,6 +18,7 @@ export interface Theme {
   colors: {
     ['bg-color']: string
     ['content-color']: string
+    ['content-bg-color']: string
     ['nav-color']: string
     ['separator-color']: string
     ['highlight-color']: string
@@ -31,6 +32,7 @@ export const themes: Theme[] = [
     colors: {
       ['bg-color']: '#282230',
       ['content-color']: '#f1f1f1',
+      ['content-bg-color']: '#1b1c21',
       ['nav-color']: '#161616',
       ['separator-color']: '#404040',
       ['highlight-color']: '#19A0FB',
@@ -42,6 +44,7 @@ export const themes: Theme[] = [
     colors: {
       ['bg-color']: '#1b1c21',
       ['content-color']: '#e2e2e2',
+      ['content-bg-color']: '#1b1c21',
       ['nav-color']: '#161616',
       ['separator-color']: '#404040',
       ['highlight-color']: '#19A0FB',

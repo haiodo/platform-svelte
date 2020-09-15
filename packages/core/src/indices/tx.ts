@@ -1,26 +1,40 @@
 //
 // Copyright © 2020 Anticrm Platform Contributors.
-// 
+//
 // Licensed under the Eclipse Public License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License. You may
 // obtain a copy of the License at https://www.eclipse.org/legal/epl-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// 
+//
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
 
-import { Class, Doc, Ref, Classifier } from '@anticrm/core'
+import { Index, Storage } from '../utils'
+import { Model } from '../model'
+import { CreateTx, PushTx, UpdateTx } from '../tx'
 
-export const TITLE_DOMAIN = 'title'
+export class TxIndex implements Index {
+  private modelDb: Model
+  private storage: Storage
 
-export interface Title extends Doc {
-  _objectClass: Ref<Classifier<Doc>>
-  _objectId: Ref<Doc>
-  title: string | number
+  constructor(modelDb: Model, storage: Storage) {
+    this.modelDb = modelDb
+    this.storage = storage
+  }
+
+  onCreate (create: CreateTx): Promise<any> {
+    return this.storage.store(create)
+  }
+
+  onPush (tx: PushTx): Promise<any> {
+    return this.storage.store(tx)
+  }
+
+  onUpdate (tx: UpdateTx): Promise<any> {
+    return this.storage.store(tx)
+  }
 }
-
-export const CORE_CLASS_TITLE = 'class:core.Title' as Ref<Class<Title>>

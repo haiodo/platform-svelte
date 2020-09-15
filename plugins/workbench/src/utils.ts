@@ -13,14 +13,14 @@
 // limitations under the License.
 //
 
-import { Class, Doc, Ref, Classifier } from '@anticrm/core'
+import { Ref, Class, Doc, AnyLayout } from '@anticrm/core'
+import { Platform } from '@anticrm/platform'
+import { getContext } from 'svelte'
+import core from '@anticrm/platform-core'
 
-export const TITLE_DOMAIN = 'title'
+export function find<T extends Doc> (_class: Ref<Class<T>>, query: AnyLayout): Promise<T[]> {
+  const platform = getContext('platform') as Platform
 
-export interface Title extends Doc {
-  _objectClass: Ref<Classifier<Doc>>
-  _objectId: Ref<Doc>
-  title: string | number
+  return platform.getPlugin(core.id)
+    .then(coreService => coreService.find(_class, query))
 }
-
-export const CORE_CLASS_TITLE = 'class:core.Title' as Ref<Class<Title>>

@@ -18,7 +18,7 @@ import { Builder } from '@anticrm/model'
 import { model as platformCore } from '@anticrm/platform-core/src/__model__'
 import { model as presentation } from '@anticrm/presentation/src/__model__'
 import { model as contact } from '@anticrm/contact/src/__model__'
-// import workbenchModel from '@anticrm/workbench-model/src/model'
+import { model as workbench } from '@anticrm/workbench/src/__model__'
 // import chunterModel from '@anticrm/chunter-model/src/model'
 // import recruitmentModel from '@anticrm/recruitment-model/src/model'
 // import taskModel from '@anticrm/task-model/src/model'
@@ -29,7 +29,7 @@ export const builder = new Builder()
 builder.load(platformCore)
 builder.load(presentation)
 builder.load(contact)
-// builder.load(workbenchModel)
+builder.load(workbench)
 // builder.load(chunterModel)
 // builder.load(recruitmentModel)
 // builder.load(taskModel)

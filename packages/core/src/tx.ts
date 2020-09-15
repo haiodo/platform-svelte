@@ -30,12 +30,6 @@ export interface VDoc extends Doc {
   _modifiedBy?: StringProperty
 }
 
-export interface Title extends Doc {
-  _objectClass: Ref<Classifier<Doc>>
-  _objectId: Ref<Doc>
-  title: string | number
-}
-
 export interface Tx extends Doc {
   _date: DateProperty
   _user: StringProperty
@@ -59,3 +53,10 @@ export interface UpdateTx extends Tx {
 
 export interface DeleteTx extends Tx {
 }
+
+export const CORE_CLASS_CREATETX = 'class:core.CreateTx' as Ref<Class<CreateTx>>
+export const CORE_CLASS_PUSHTX = 'class:core.PushTx' as Ref<Class<PushTx>>
+export const CORE_CLASS_UPDATETX = 'class:core.UpdateTx' as Ref<Class<UpdateTx>>
+export const CORE_CLASS_DELETETX = 'class:core.DeleteTx' as Ref<Class<DeleteTx>>
+
+

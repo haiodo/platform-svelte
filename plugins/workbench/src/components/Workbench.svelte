@@ -14,17 +14,53 @@
 -->
 
 <script lang="ts">
+  import { Ref, Doc } from '@anticrm/core'
+  import workbench, { Perspective } from '../..'
+  import { find } from '../utils'
+
+  import Component from '@anticrm/platform-ui/src/components/Component.svelte'
+  import PerspectiveNav from './internal/PerspectiveNav.svelte'
+
+  let perspectives: Perspective[] = []
+  let current: Ref<Doc>
+
+  find(workbench.class.Perspective, {}).then(p => { 
+    perspectives = p 
+    if (p.length > 0) {
+      current = p[0]._id
+    }
+  })
+
+  $: component = perspectives.find(h => h._id === current)?.component
 </script>
 
 <div id="workbench">
+ 
   <nav>
-    <!-- <Nav :current="app" @navigate="navigateApp" /> -->
+    <PerspectiveNav { current } { perspectives }/>
   </nav>
 
   <main>
-    <!-- <WorkbenchMain :location="location" /> -->
-    <widget :component="perspective" :location="location" />
+    <Component is={ component }/>
   </main>
 
   <!-- <Spotlight /> -->
 </div>
+
+<style lang="scss">
+  #workbench {
+    display: flex;
+    height: 100%;
+  }
+  
+  nav {
+    width: 48px;
+    background-color: var(--theme-bg-color);
+  }
+
+  main {
+    background-color: var(--theme-content-bg-color);
+    width: 100%;
+  }
+
+</style>

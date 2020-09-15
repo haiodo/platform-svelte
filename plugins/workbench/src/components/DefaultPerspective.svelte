@@ -1,4 +1,4 @@
-//
+<!--
 // Copyright © 2020 Anticrm Platform Contributors.
 // 
 // Licensed under the Eclipse Public License, Version 2.0 (the "License");
@@ -11,16 +11,6 @@
 // 
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
+-->
 
-import { Class, Doc, Ref, Classifier } from '@anticrm/core'
-
-export const TITLE_DOMAIN = 'title'
-
-export interface Title extends Doc {
-  _objectClass: Ref<Classifier<Doc>>
-  _objectId: Ref<Doc>
-  title: string | number
-}
-
-export const CORE_CLASS_TITLE = 'class:core.Title' as Ref<Class<Title>>
+<h1>Hallo!</h1>

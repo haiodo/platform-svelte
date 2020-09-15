@@ -6,10 +6,10 @@
   import Spinner from "./internal/Spinner.svelte";
   import Icon from "./Icon.svelte";
 
-  export let is: AnyComponent;
+  export let is: AnyComponent | undefined;
 
-  const platform = getContext("platform") as Platform;
-  const component = platform.getResource(is);
+  const platform = getContext("platform") as Platform
+  $: component = is ? platform.getResource(is) : null
 </script>
 
 {#await component}

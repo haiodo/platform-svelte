@@ -13,14 +13,12 @@
 // limitations under the License.
 //
 
-import { Class, Doc, Ref, Classifier } from '@anticrm/core'
+import { Platform } from '@anticrm/platform'
+import workbench from '.'
 
-export const TITLE_DOMAIN = 'title'
-
-export interface Title extends Doc {
-  _objectClass: Ref<Classifier<Doc>>
-  _objectId: Ref<Doc>
-  title: string | number
+export default (platform: Platform) => {
+  const spritesUrl = require('../assets/icons.svg')
+  platform.loadMetadata(workbench.icon, {
+    DefaultPerspective: spritesUrl + '#perspective'
+  })
 }
-
-export const CORE_CLASS_TITLE = 'class:core.Title' as Ref<Class<Title>>

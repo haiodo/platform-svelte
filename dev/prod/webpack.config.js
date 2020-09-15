@@ -14,6 +14,7 @@
 //
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const Dotenv = require('dotenv-webpack')
 const path = require('path')
 
 const mode = process.env.NODE_ENV || 'development'
@@ -34,7 +35,8 @@ module.exports = {
 	output: {
 		path: __dirname + '/dist',
 		filename: '[name].js',
-		chunkFilename: '[name].[id].js'
+		chunkFilename: '[name].[id].js',
+		publicPath: '/'
 	},
 	module: {
 		rules: [
@@ -50,7 +52,22 @@ module.exports = {
 					options: {
 						emitCss: true,
 						hotReload: true,
-						preprocess: require('svelte-preprocess')({})
+						preprocess: require('svelte-preprocess')({
+							babel: {
+								presets: [
+									[
+										'@babel/preset-env',
+										{
+											loose: true,
+											modules: false,
+											targets: {
+												esmodules: true,
+											},
+										},
+									],
+								],
+							},
+						})
 					}
 				}
 			},
@@ -102,12 +119,14 @@ module.exports = {
 	plugins: [
 		new MiniCssExtractPlugin({
 			filename: '[name].css'
-		})
+		}),
+		new Dotenv()
 	],
 	devtool: prod ? false : 'source-map',
 	devServer: {
+		publicPath: '/',
 		historyApiFallback: {
 			disableDotRule: true
 		}
-	}
+	},
 }

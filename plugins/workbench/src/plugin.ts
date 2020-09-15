@@ -14,7 +14,10 @@
 //
 
 import type { Platform } from '@anticrm/platform'
-import type { WorkbenchService } from '.'
+import workbench, { WorkbenchService } from '.'
+
+import Workbench from './components/Workbench.svelte'
+import DefaultPerspective from './components/DefaultPerspective.svelte'
 
 /*!
  * Anticrm Platform™ Workbench Plugin
@@ -22,6 +25,9 @@ import type { WorkbenchService } from '.'
  * Licensed under the Eclipse Public License, Version 2.0
  */
 export default async (platform: Platform): Promise<WorkbenchService> => {
+
+  platform.setResource(workbench.component.Workbench, Workbench)
+  platform.setResource(workbench.component.DefaultPerspective, DefaultPerspective)
 
   return {}
 

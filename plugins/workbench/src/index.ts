@@ -14,9 +14,28 @@
 //
 
 import { Metadata, plugin, Plugin, Resource, Service } from '@anticrm/platform'
+import { StringProperty, Doc, Class, Ref } from '@anticrm/core'
+
+import ui, { AnyComponent, Asset } from '@anticrm/platform-ui'
+
+export interface Perspective extends Doc {
+  label: StringProperty
+  icon?: Asset
+  component: AnyComponent
+}
 
 export interface WorkbenchService extends Service {
 }
 
 export default plugin('workbench' as Plugin<WorkbenchService>, {}, {
+  icon: {
+    DefaultPerspective: '' as Asset
+  },
+  component: {
+    Workbench: '' as AnyComponent,
+    DefaultPerspective: '' as AnyComponent,
+  },
+  class: {
+    Perspective: '' as Ref<Class<Perspective>>
+  }
 })

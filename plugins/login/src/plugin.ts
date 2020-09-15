@@ -18,7 +18,7 @@ import { Request, Response, serialize, toStatus } from '@anticrm/core'
 
 import { UIService } from '@anticrm/platform-ui'
 
-import login, { LoginService } from '.'
+import login, { LoginService, LoginInfo, ACCOUNT_KEY } from '.'
 
 import LoginForm from './components/LoginForm.svelte'
 
@@ -33,6 +33,13 @@ export default async (platform: Platform, deps: { ui: UIService }): Promise<Logi
 
   platform.setResource(login.component.LoginForm, LoginForm)
   // platform.setResource(login.component.SignupForm, SignupForm)
+
+  function setLoginInfo (loginInfo: LoginInfo) {
+    localStorage.setItem(ACCOUNT_KEY, JSON.stringify(loginInfo))
+
+    platform.setMetadata(login.metadata.WhoAmI, loginInfo.email)
+    platform.setMetadata(login.metadata.Token, loginInfo.token)
+  }
 
   async function doLogin (username: string, password: string, workspace: string): Promise<Status> {
     const url = platform.getMetadata(login.metadata.LoginUrl);
@@ -59,10 +66,10 @@ export default async (platform: Platform, deps: { ui: UIService }): Promise<Logi
       }
       if (result.result) {
         console.log("result", result.result);
-        // loginService.setLoginInfo(result.result);
-        // uiService.navigate(
-        //   "/component:workbench.Workbench/application:workbench.Default"
-        // );
+        setLoginInfo(result.result);
+        uiService.navigate(
+          "/component:workbench.Workbench/application:workbench.Default"
+        );
       }
       return new Status(Severity.OK, 0, '')
     } catch (err) {
@@ -71,6 +78,6 @@ export default async (platform: Platform, deps: { ui: UIService }): Promise<Logi
   }
 
   return {
-    doLogin
+    doLogin,
   }
 }
