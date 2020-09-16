@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-export const copyright = "Copyright © 2020 Anticrm Platform Contributors."
+export const copyright = 'Copyright © 2020 Anticrm Platform Contributors.'
 
 export interface EditorContentEvent {
     isEmpty: boolean
