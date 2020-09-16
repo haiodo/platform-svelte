@@ -1,14 +1,14 @@
 <!--
 // Copyright © 2020 Anticrm Platform Contributors.
-// 
+//
 // Licensed under the Eclipse Public License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License. You may
 // obtain a copy of the License at https://www.eclipse.org/legal/epl-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// 
+//
 // See the License for the specific language governing permissions and
 // limitations under the License.
 -->
@@ -22,6 +22,7 @@
   import Component from '@anticrm/platform-ui/src/components/Component.svelte'
   import Icon from '@anticrm/platform-ui/src/components/Icon.svelte'
   import LinkTo from '@anticrm/platform-ui/src/components/LinkTo.svelte'
+  import EditorContent from '@anticrm/sparkling-rich/src/EditorContent.svelte'
 
   let perspectives: Perspective[] = []
   let current: Ref<Doc>
@@ -31,15 +32,15 @@
     current = loc.pathname.split('/')[2] as Ref<Doc>
   })
 
-  find(workbench.class.Perspective, {}).then(p => { 
-    perspectives = p 
+  find(workbench.class.Perspective, {}).then(p => {
+    perspectives = p
   })
 
   $: component = perspectives.find(h => h._id === current)?.component
 </script>
 
 <div id="workbench">
- 
+
   <nav>
     { #each perspectives as perspective (perspective._id) }
     <div
@@ -55,6 +56,9 @@
   </nav>
 
   <main>
+    <div style={"border: 1px;"}>
+      <EditorContent content={'Hello world'} ></EditorContent>
+    </div>
     { #if component}
       <Component is={ component }/>
     { /if}
@@ -68,7 +72,7 @@
     display: flex;
     height: 100%;
   }
-  
+
   nav {
     width: 48px;
     background-color: var(--theme-bg-color);
@@ -93,7 +97,7 @@
     .remainder {
       flex-grow: 1;
       border-right: solid 1px var(--theme-separator-color);
-    }      
+    }
   }
 
   main {
