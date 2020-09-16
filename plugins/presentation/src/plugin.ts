@@ -15,19 +15,23 @@
 
 import { Platform } from '@anticrm/platform'
 import { Attribute, Class, Obj, Ref, Type, VDoc, Mixin } from '@anticrm/core'
-import ui, { AttributeUI, AttrModel, ClassModel, GroupModel, PresentationCore, ComponentExtension } from '.'
+import ui, { AttributeUI, AttrModel, ClassModel, GroupModel, PresentationService, ComponentExtension } from '.'
 import { CoreService } from '@anticrm/platform-core'
 import vue, { AnyComponent, Asset } from '@anticrm/platform-ui'
 import { I18n, IntlString } from '@anticrm/platform-i18n'
+
+import ObjectBrowser from './components/internal/ObjectBrowser.svelte'
 
 /*!
  * Anticrm Platform™ Presentation Core Plugin
  * © 2020 Anticrm Platform Contributors. All Rights Reserved.
  * Licensed under the Eclipse Public License, Version 2.0
  */
-export default async (platform: Platform, deps: { core: CoreService, i18n: I18n }): Promise<PresentationCore> => {
+export default async (platform: Platform, deps: { core: CoreService, i18n: I18n }): Promise<PresentationService> => {
   const coreService = deps.core
   const i18nService = deps.i18n
+
+  platform.setResource(ui.component.ObjectBrowser, ObjectBrowser)
 
   async function getGroupModel (_class: Ref<Class<Obj>>): Promise<GroupModel> {
     const model = coreService.getModel()
@@ -168,24 +172,9 @@ export default async (platform: Platform, deps: { core: CoreService, i18n: I18n 
     const attrModels = hierarchy.map(_class => getOwnAttrModel(_class))
 
     const groups = await Promise.all(groupModels)
-    const attributes = await Promise.all(attrModels).then(result => result.flat())
+    const attributes = await Promise.all(attrModels).then(result => result.reduce((acc, val) => acc.concat(val), []))
 
     return new TClassModel(groups, attributes)
-  }
-
-  function getEmptyModel (): ClassModel {
-    return new TClassModel([], [])
-  }
-
-  function getEmptyAttribute (_class: Ref<Class<Obj>>): AttrModel {
-    return {
-      _class,
-      key: 'non-existent',
-      label: 'Несуществующий аттрибут' as IntlString,
-      placeholder: '' as IntlString,
-      presenter: 'component:ui.StringPresenter' as AnyComponent,
-      type: {} as Type
-    }
   }
 
   function getComponentExtension (_class: Ref<Class<Obj>>, extension: Ref<Mixin<ComponentExtension<VDoc>>>): AnyComponent {
@@ -205,8 +194,6 @@ export default async (platform: Platform, deps: { core: CoreService, i18n: I18n 
   }
 
   return {
-    getEmptyModel,
-    getEmptyAttribute,
     getClassModel,
     getComponentExtension
   }

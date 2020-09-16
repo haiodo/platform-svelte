@@ -1,4 +1,4 @@
-<!--
+//
 // Copyright © 2020 Anticrm Platform Contributors.
 // 
 // Licensed under the Eclipse Public License, Version 2.0 (the "License");
@@ -11,27 +11,18 @@
 // 
 // See the License for the specific language governing permissions and
 // limitations under the License.
--->
+//
 
-<script lang="ts">
-  import { Platform } from "@anticrm/platform";
-  import { getContext } from "svelte";
+import type { Platform } from '@anticrm/platform'
+import workbench, { TaskService } from '.'
 
-  import ui, { AnyComponent } from "@anticrm/platform-ui";
-  import Spinner from "./internal/Spinner.svelte";
-  import Icon from "./Icon.svelte";
+/*!
+ * Anticrm Platform™ Task Plugin
+ * © 2020 Anticrm Platform Contributors. All Rights Reserved.
+ * Licensed under the Eclipse Public License, Version 2.0
+ */
+export default async (platform: Platform): Promise<TaskService> => {
 
-  export let is: AnyComponent;
-  export let props: any
+  return {}
 
-  const platform = getContext("platform") as Platform
-  $: component = platform.getResource(is)
-</script>
-
-{#await component}
-  <Spinner />
-{:then ctor}
-  <svelte:component this={ctor} {...props}/>
-{:catch}
-  <Icon icon={ui.icon.Error} clazz="icon-2x" />
-{/await}
+}

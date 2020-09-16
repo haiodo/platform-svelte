@@ -24,6 +24,8 @@
   import Component from '@anticrm/platform-ui/src/components/Component.svelte'
   import { AnyComponent } from '@anticrm/platform-ui';
 
+  import InputControl from './InputControl.svelte'
+
   let location: string[]
 
   const locationStore = getUIService().getLocation()
@@ -45,8 +47,8 @@
     space = location[3] as Ref<Space>
     if (!application) {
       application = workbench.application.Activity
-      component = applications.find(a => a._id === application)?.component
     }
+    component = applications.find(a => a._id === application)?.component
   }
 
 </script>
@@ -74,12 +76,11 @@
   <div class="main">
     <div class="main-content">
       { #if component}
-        <Component is = {component} />
+        <Component is = {component} props={{_class: "class:task.Task"}} />
       { /if }
-      <!-- <widget :_class="type" :space="space" :component="component" @open="open" /> -->
     </div>
     <div class="input-control">
-      <!-- <InputControl @message="message" /> -->
+      <InputControl />
     </div>
   </div>
 

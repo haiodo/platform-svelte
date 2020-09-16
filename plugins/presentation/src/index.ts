@@ -84,14 +84,12 @@ export interface ClassModel {
 
 // S E R V I C E
 
-export interface PresentationCore extends Service {
-  getEmptyModel (): ClassModel
-  getEmptyAttribute (_class: Ref<Class<Obj>>): AttrModel
+export interface PresentationService extends Service {
   getClassModel (_class: Ref<Class<Obj>>, top?: Ref<Class<Obj>>): Promise<ClassModel>
   getComponentExtension (_class: Ref<Class<Obj>>, extension: Ref<Mixin<ComponentExtension<VDoc>>>): AnyComponent
 }
 
-export default plugin('presentation' as Plugin<PresentationCore>, { core: core.id, i18n: i18n.id }, {
+export default plugin('presentation' as Plugin<PresentationService>, { core: core.id, i18n: i18n.id }, {
   class: {
     AttributeUI: '' as Ref<Class<AttributeUI>>,
     Presenter: '' as Ref<Mixin<Presenter<Type>>>,
@@ -102,8 +100,7 @@ export default plugin('presentation' as Plugin<PresentationCore>, { core: core.i
     UXObject: '' as Ref<Mixin<UXObject>>
   },
   component: {
-    Table: '' as AnyComponent,
-    BrowseView: '' as AnyComponent,
+    ObjectBrowser: '' as AnyComponent,
     NumberPresenter: '' as AnyComponent,
     StringPresenter: '' as AnyComponent,
     RefPresenter: '' as AnyComponent

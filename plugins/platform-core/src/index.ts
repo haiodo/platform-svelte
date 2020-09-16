@@ -16,15 +16,18 @@
 import { plugin, Plugin, Service, Metadata } from '@anticrm/platform'
 import {
   Ref, Class, Doc, AnyLayout, Obj,
-  CreateTx, PushTx, UpdateTx, DeleteTx, Space, Title, CORE_CLASS_BACKLINKS
+  CreateTx, PushTx, UpdateTx, DeleteTx, Space, Title, CORE_CLASS_BACKLINKS,
+  QueryResult
 } from '@anticrm/core'
 import type { ModelDb } from './modeldb'
+import { Readable } from 'svelte/store'
 
 export interface Application extends Doc {
 }
 
 export interface CoreService extends Service {
   getModel (): ModelDb
+  query<T extends Doc> (_class: Ref<Class<T>>, query: AnyLayout): QueryResult<T>
   find<T extends Doc> (_class: Ref<Class<T>>, query: AnyLayout): Promise<T[]>
 }
 

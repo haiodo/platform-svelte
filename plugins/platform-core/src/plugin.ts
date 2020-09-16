@@ -14,13 +14,12 @@
 //
 
 import type { Platform } from '@anticrm/platform'
-import { Ref, Class, Doc, AnyLayout, Domain, MODEL_DOMAIN, CoreProtocol, Tx, Space } from '@anticrm/core'
+import { Ref, Class, Doc, AnyLayout, Domain, MODEL_DOMAIN, CoreProtocol, Tx, QueryResult } from '@anticrm/core'
 import { ModelDb } from './modeldb'
 
 import type { CoreService } from '.'
 import rpcService from './rpc'
-
-import { writable, derived } from 'svelte/store'
+import { Cache } from './cache'
 
 /*!
  * Anticrm Platform™ Workbench Plugin
@@ -40,6 +39,8 @@ export default async (platform: Platform): Promise<CoreService> => {
   const model = new ModelDb()
   model.loadModel(await coreProtocol.loadDomain(MODEL_DOMAIN))
 
+  const cache = new Cache(coreProtocol)
+
   const domains = new Map<string, Domain>()
   domains.set(MODEL_DOMAIN, model)
 
@@ -49,11 +50,21 @@ export default async (platform: Platform): Promise<CoreService> => {
     if (domain) {
       return domain.find(_class, query)
     }
-    throw new Error('domain not found: ' + domainName)
+    return cache.find(_class, query)
+  }
+
+  function query<T extends Doc> (_class: Ref<Class<T>>, query: AnyLayout): QueryResult<T> {
+    const domainName = model.getDomain(_class)
+    const domain = domains.get(domainName)
+    if (domain) {
+      return domain.query(_class, query)
+    }
+    return cache.query(_class, query)
   }
 
   return {
     getModel () { return model },
+    query,
     find
   }
 

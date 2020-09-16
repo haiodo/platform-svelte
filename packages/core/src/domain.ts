@@ -15,6 +15,14 @@
 
 import { Ref, Doc, Class, AnyLayout } from './core'
 
+type Subscriber<T> = (value: T) => void
+type Unsubscriber = () => void
+
+export interface QueryResult<T extends Doc> {
+  subscribe (run: Subscriber<T[]>): Unsubscriber
+}
+
 export interface Domain {
   find<T extends Doc> (_class: Ref<Class<T>>, query: AnyLayout): Promise<T[]>
+  query<T extends Doc> (_class: Ref<Class<T>>, query: AnyLayout): QueryResult<T>
 }

@@ -13,25 +13,34 @@
 // limitations under the License.
 -->
 
-<script lang="ts">
-  import { Platform } from "@anticrm/platform";
-  import { getContext } from "svelte";
+<script type="ts">
+  import { Ref, Class, Doc, QueryResult } from '@anticrm/core'
+  import ScrollView from '@anticrm/sparkling-controls/src/ScrollView.svelte'
+  import Table from './Table.svelte'
 
-  import ui, { AnyComponent } from "@anticrm/platform-ui";
-  import Spinner from "./internal/Spinner.svelte";
-  import Icon from "./Icon.svelte";
-
-  export let is: AnyComponent;
-  export let props: any
-
-  const platform = getContext("platform") as Platform
-  $: component = platform.getResource(is)
+  export let _class: Ref<Class<Doc>>
 </script>
 
-{#await component}
-  <Spinner />
-{:then ctor}
-  <svelte:component this={ctor} {...props}/>
-{:catch}
-  <Icon icon={ui.icon.Error} clazz="icon-2x" />
-{/await}
+<div class="workbench-browse">
+  <div>
+    <span class="caption-1">{_class}</span>&nbsp;
+  </div>
+  <div class="table">
+    <ScrollView>
+      <Table {_class} />
+    </ScrollView>
+  </div>
+</div>
+
+<style lang="scss">
+  .workbench-browse {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  
+    .table {
+      flex-grow: 1;
+      height: 100%;
+    }
+  }
+</style>

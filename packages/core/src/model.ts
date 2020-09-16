@@ -15,7 +15,7 @@
 
 import { generateId } from './objectid'
 import { AnyLayout, Class, Classifier, ClassifierKind, Doc, Mixin, Obj, PropertyType, Ref } from './core'
-import { Domain } from './domain'
+import { Domain, QueryResult } from './domain'
 
 export function mixinKey (mixin: Ref<Mixin<Doc>>, key: string): string {
   return key + '|' + mixin.replace('.', '~')
@@ -233,6 +233,16 @@ export class Model implements Domain {
   tx (): Promise<void> {
     throw new Error('memdb is read only')
   }
+
+  query<T extends Doc> (_class: Ref<Class<T>>, query: AnyLayout): QueryResult<T> {
+    return {
+      subscribe: (cb: (result: T[]) => void) => {
+        this.find(_class, query).then(result => { cb(result) })
+        return () => { }
+      }
+    }
+  }
+
 }
 
 function filterEq (docs: Doc[], propertyKey: string, value: PropertyType): Doc[] {
